@@ -74,9 +74,19 @@ namespace WinFormsApp1
                                     var destinationIp = ipPacket.DestinationAddress;
                                     var sourcePort = tcpPacket.SourcePort;
                                     var destinationPort = tcpPacket.DestinationPort;
-
-                                    listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
-                                    listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;
+                                    if (listBoxPackets.InvokeRequired)
+                                    {
+                                        listBoxPackets.Invoke(new MethodInvoker(delegate
+                                        {
+                                            listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
+                                            listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;
+                                        }));
+                                    }
+                                    else
+                                    {
+                                        listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
+                                        listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;
+                                    }
                                 }
                             }
                         }

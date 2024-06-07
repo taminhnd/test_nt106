@@ -207,11 +207,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\LTMCB\\test\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
+      "projectUniqueName": "C:\\LTMCB\\test\\test_nt106\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
       "projectName": "WinFormsApp1",
-      "projectPath": "C:\\LTMCB\\test\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
+      "projectPath": "C:\\LTMCB\\test\\test_nt106\\WinFormsApp1\\WinFormsApp1\\WinFormsApp1.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\LTMCB\\test\\WinFormsApp1\\WinFormsApp1\\obj\\",
+      "outputPath": "C:\\LTMCB\\test\\test_nt106\\WinFormsApp1\\WinFormsApp1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
