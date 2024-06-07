@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,8 +13,9 @@ namespace WinFormsApp1
     public partial class Form1 : Form
     {
         private ICaptureDevice deviceIA;
-        private ICaptureDevice deviceB;
+        private ICaptureDevice deviceIB;
         private CaptureDeviceList devices = CaptureDeviceList.Instance;
+        private List<Packet> packetList = new List<Packet>();
 
         public Form1()
         {
@@ -50,6 +52,9 @@ namespace WinFormsApp1
         private void buttonStopCapture_Click(object sender, EventArgs e)
         {
             deviceIA.Close();
+            byte[] data = packetList.ElementAt(packetList.Count - 1).PayloadPacket.PayloadPacket.PayloadData;
+            string a = Encoding.UTF8.GetString(data);
+            textBox1.Text = a;
             //deviceIB?.Close();
         }
 
@@ -63,6 +68,7 @@ namespace WinFormsApp1
                     try
                     {
                         var packet = Packet.ParsePacket(e.GetPacket().LinkLayerType, e.GetPacket().Data);
+                        packetList.Add(packet);
 
                         if (packet is EthernetPacket ethernetPacket)
                         {
@@ -74,6 +80,9 @@ namespace WinFormsApp1
                                     var destinationIp = ipPacket.DestinationAddress;
                                     var sourcePort = tcpPacket.SourcePort;
                                     var destinationPort = tcpPacket.DestinationPort;
+                                    var sourceMAC = ethernetPacket.SourceHardwareAddress;
+                                    var destinationMAC = ethernetPacket.DestinationHardwareAddress;
+
                                     if (listBoxPackets.InvokeRequired)
                                     {
                                         listBoxPackets.Invoke(new MethodInvoker(delegate

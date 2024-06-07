@@ -25,6 +25,7 @@
             buttonStartCapture = new Button();
             buttonStopCapture = new Button();
             listBoxPackets = new ListBox();
+            textBox1 = new TextBox();
             SuspendLayout();
             // 
             // comboBoxDeviceIA
@@ -72,9 +73,18 @@
             listBoxPackets.Size = new Size(889, 244);
             listBoxPackets.TabIndex = 4;
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(12, 378);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(1295, 170);
+            textBox1.TabIndex = 5;
+            // 
             // Form1
             // 
-            ClientSize = new Size(913, 387);
+            ClientSize = new Size(1319, 560);
+            Controls.Add(textBox1);
             Controls.Add(comboBoxDeviceIA);
             Controls.Add(comboBoxDeviceIB);
             Controls.Add(buttonStartCapture);
@@ -84,6 +94,9 @@
             Text = "Network Tamper";
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
+
+        private TextBox textBox1;
     }
 }
