@@ -54,7 +54,7 @@ namespace WinFormsApp1
             deviceIA.Close();
             byte[] data = packetList.ElementAt(packetList.Count - 1).PayloadPacket.PayloadPacket.PayloadData;
             string a = Encoding.UTF8.GetString(data);
-            textBox1.Text = a;
+            //textBox1.Text = a;
             //deviceIB?.Close();
         }
 
@@ -87,14 +87,39 @@ namespace WinFormsApp1
                                     {
                                         listBoxPackets.Invoke(new MethodInvoker(delegate
                                         {
-                                            listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
-                                            listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;
+                                            /*listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
+                                            listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;*/
+                                            var item = new ListViewItem(new[]
+                                            {
+                                                listViewPackets.Items.Count.ToString(),
+                                                sourceIp.ToString(),
+                                                destinationIp.ToString(),
+                                                sourcePort.ToString(),
+                                                destinationPort.ToString(),
+                                                sourceMAC.ToString(),
+                                                destinationMAC.ToString()
+                                            });
+                                            listViewPackets.Items.Add(item);
+                                            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
                                         }));
+                                        
                                     }
                                     else
                                     {
-                                        listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
-                                        listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;
+                                        /*listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
+                                        listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;*/
+                                        var item = new ListViewItem(new[]
+                                        {
+                                            listViewPackets.Items.Count.ToString(),
+                                            sourceIp.ToString(),
+                                            destinationIp.ToString(),
+                                            sourcePort.ToString(),
+                                            destinationPort.ToString(),
+                                            sourceMAC.ToString(),
+                                            destinationMAC.ToString()
+                                        });
+                                        listViewPackets.Items.Add(item);
+                                        listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
                                     }
                                 }
                             }
@@ -113,5 +138,7 @@ namespace WinFormsApp1
                 Console.WriteLine($"Error capturing traffic: {ex.Message}");
             }
         }
+
+        
     }
 }

@@ -25,7 +25,14 @@
             buttonStartCapture = new Button();
             buttonStopCapture = new Button();
             listBoxPackets = new ListBox();
-            textBox1 = new TextBox();
+            listViewPackets = new ListView();
+            No_of_packet = new ColumnHeader();
+            Source_IP = new ColumnHeader();
+            Des_IP = new ColumnHeader();
+            Source_Port = new ColumnHeader();
+            Des_Port = new ColumnHeader();
+            Source_Mac = new ColumnHeader();
+            Des_Mac = new ColumnHeader();
             SuspendLayout();
             // 
             // comboBoxDeviceIA
@@ -33,7 +40,7 @@
             comboBoxDeviceIA.FormattingEnabled = true;
             comboBoxDeviceIA.Location = new Point(12, 12);
             comboBoxDeviceIA.Name = "comboBoxDeviceIA";
-            comboBoxDeviceIA.Size = new Size(889, 28);
+            comboBoxDeviceIA.Size = new Size(889, 33);
             comboBoxDeviceIA.TabIndex = 0;
             // 
             // comboBoxDeviceIB
@@ -41,7 +48,7 @@
             comboBoxDeviceIB.FormattingEnabled = true;
             comboBoxDeviceIB.Location = new Point(12, 46);
             comboBoxDeviceIB.Name = "comboBoxDeviceIB";
-            comboBoxDeviceIB.Size = new Size(889, 28);
+            comboBoxDeviceIB.Size = new Size(889, 33);
             comboBoxDeviceIB.TabIndex = 1;
             // 
             // buttonStartCapture
@@ -68,23 +75,63 @@
             // 
             listBoxPackets.AllowDrop = true;
             listBoxPackets.FormattingEnabled = true;
+            listBoxPackets.ItemHeight = 25;
             listBoxPackets.Location = new Point(12, 128);
             listBoxPackets.Name = "listBoxPackets";
-            listBoxPackets.Size = new Size(889, 244);
+            listBoxPackets.Size = new Size(889, 229);
             listBoxPackets.TabIndex = 4;
             // 
-            // textBox1
+            // listViewPackets
             // 
-            textBox1.Location = new Point(12, 378);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(1295, 170);
-            textBox1.TabIndex = 5;
+            listViewPackets.Alignment = ListViewAlignment.SnapToGrid;
+            listViewPackets.Columns.AddRange(new ColumnHeader[] { No_of_packet, Source_IP, Des_IP, Source_Port, Des_Port, Source_Mac, Des_Mac });
+            listViewPackets.FullRowSelect = true;
+            listViewPackets.Location = new Point(12, 128);
+            listViewPackets.Name = "listViewPackets";
+            listViewPackets.Size = new Size(954, 229);
+            listViewPackets.TabIndex = 6;
+            listViewPackets.UseCompatibleStateImageBehavior = false;
+            listViewPackets.View = View.Details;
+            // 
+            // No_of_packet
+            // 
+            No_of_packet.Text = "#";
+            No_of_packet.Width = 50;
+            // 
+            // Source_IP
+            // 
+            Source_IP.Text = "Source IP";
+            Source_IP.Width = 150;
+            // 
+            // Des_IP
+            // 
+            Des_IP.Text = "Destination IP";
+            Des_IP.Width = 150;
+            // 
+            // Source_Port
+            // 
+            Source_Port.Text = "Source Port";
+            Source_Port.Width = 150;
+            // 
+            // Des_Port
+            // 
+            Des_Port.Text = "Destination Port";
+            Des_Port.Width = 150;
+            // 
+            // Source_Mac
+            // 
+            Source_Mac.Text = "Source_Mac";
+            Source_Mac.Width = 150;
+            // 
+            // Des_Mac
+            // 
+            Des_Mac.Text = "Destination Mac";
+            Des_Mac.Width = 150;
             // 
             // Form1
             // 
-            ClientSize = new Size(1319, 560);
-            Controls.Add(textBox1);
+            ClientSize = new Size(972, 367);
+            Controls.Add(listViewPackets);
             Controls.Add(comboBoxDeviceIA);
             Controls.Add(comboBoxDeviceIB);
             Controls.Add(buttonStartCapture);
@@ -94,9 +141,15 @@
             Text = "Network Tamper";
             Load += Form1_Load;
             ResumeLayout(false);
-            PerformLayout();
         }
 
-        private TextBox textBox1;
+        private ListView listViewPackets;
+        private ColumnHeader No_of_packet;
+        private ColumnHeader Source_IP;
+        private ColumnHeader Des_IP;
+        private ColumnHeader Source_Port;
+        private ColumnHeader Des_Port;
+        private ColumnHeader Source_Mac;
+        private ColumnHeader Des_Mac;
     }
 }
