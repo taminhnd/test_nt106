@@ -102,7 +102,7 @@ namespace WinFormsApp1
                                             listViewPackets.Items.Add(item);
                                             listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
                                         }));
-                                        
+
                                     }
                                     else
                                     {

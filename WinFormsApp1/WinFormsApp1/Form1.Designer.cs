@@ -33,29 +33,31 @@
             Des_Port = new ColumnHeader();
             Source_Mac = new ColumnHeader();
             Des_Mac = new ColumnHeader();
+            label1 = new Label();
+            label2 = new Label();
             SuspendLayout();
             // 
             // comboBoxDeviceIA
             // 
             comboBoxDeviceIA.FormattingEnabled = true;
-            comboBoxDeviceIA.Location = new Point(12, 12);
+            comboBoxDeviceIA.Location = new Point(121, 12);
             comboBoxDeviceIA.Name = "comboBoxDeviceIA";
-            comboBoxDeviceIA.Size = new Size(889, 33);
+            comboBoxDeviceIA.Size = new Size(839, 33);
             comboBoxDeviceIA.TabIndex = 0;
             // 
             // comboBoxDeviceIB
             // 
             comboBoxDeviceIB.FormattingEnabled = true;
-            comboBoxDeviceIB.Location = new Point(12, 46);
+            comboBoxDeviceIB.Location = new Point(121, 51);
             comboBoxDeviceIB.Name = "comboBoxDeviceIB";
-            comboBoxDeviceIB.Size = new Size(889, 33);
+            comboBoxDeviceIB.Size = new Size(839, 33);
             comboBoxDeviceIB.TabIndex = 1;
             // 
             // buttonStartCapture
             // 
-            buttonStartCapture.Location = new Point(12, 80);
+            buttonStartCapture.Location = new Point(12, 90);
             buttonStartCapture.Name = "buttonStartCapture";
-            buttonStartCapture.Size = new Size(430, 42);
+            buttonStartCapture.Size = new Size(458, 42);
             buttonStartCapture.TabIndex = 2;
             buttonStartCapture.Text = "Start Capture";
             buttonStartCapture.UseVisualStyleBackColor = true;
@@ -63,9 +65,9 @@
             // 
             // buttonStopCapture
             // 
-            buttonStopCapture.Location = new Point(448, 80);
+            buttonStopCapture.Location = new Point(476, 90);
             buttonStopCapture.Name = "buttonStopCapture";
-            buttonStopCapture.Size = new Size(453, 42);
+            buttonStopCapture.Size = new Size(484, 42);
             buttonStopCapture.TabIndex = 3;
             buttonStopCapture.Text = "Stop Capture";
             buttonStopCapture.UseVisualStyleBackColor = true;
@@ -76,7 +78,7 @@
             listBoxPackets.AllowDrop = true;
             listBoxPackets.FormattingEnabled = true;
             listBoxPackets.ItemHeight = 25;
-            listBoxPackets.Location = new Point(12, 128);
+            listBoxPackets.Location = new Point(12, 147);
             listBoxPackets.Name = "listBoxPackets";
             listBoxPackets.Size = new Size(889, 229);
             listBoxPackets.TabIndex = 4;
@@ -86,9 +88,9 @@
             listViewPackets.Alignment = ListViewAlignment.SnapToGrid;
             listViewPackets.Columns.AddRange(new ColumnHeader[] { No_of_packet, Source_IP, Des_IP, Source_Port, Des_Port, Source_Mac, Des_Mac });
             listViewPackets.FullRowSelect = true;
-            listViewPackets.Location = new Point(12, 128);
+            listViewPackets.Location = new Point(7, 138);
             listViewPackets.Name = "listViewPackets";
-            listViewPackets.Size = new Size(954, 229);
+            listViewPackets.Size = new Size(964, 395);
             listViewPackets.TabIndex = 6;
             listViewPackets.UseCompatibleStateImageBehavior = false;
             listViewPackets.View = View.Details;
@@ -128,9 +130,29 @@
             Des_Mac.Text = "Destination Mac";
             Des_Mac.Width = 150;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 15);
+            label1.Name = "label1";
+            label1.Size = new Size(86, 25);
+            label1.TabIndex = 7;
+            label1.Text = "Device IA";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 54);
+            label2.Name = "label2";
+            label2.Size = new Size(84, 25);
+            label2.TabIndex = 8;
+            label2.Text = "Device IB";
+            // 
             // Form1
             // 
-            ClientSize = new Size(972, 367);
+            ClientSize = new Size(982, 545);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(listViewPackets);
             Controls.Add(comboBoxDeviceIA);
             Controls.Add(comboBoxDeviceIB);
@@ -141,6 +163,7 @@
             Text = "Network Tamper";
             Load += Form1_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         private ListView listViewPackets;
@@ -151,5 +174,7 @@
         private ColumnHeader Des_Port;
         private ColumnHeader Source_Mac;
         private ColumnHeader Des_Mac;
+        private Label label1;
+        private Label label2;
     }
 }
