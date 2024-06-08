@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +15,10 @@ namespace WinFormsApp1
     public partial class Form1 : Form
     {
         private ICaptureDevice deviceIA;
-        private ICaptureDevice deviceIB;
+        private ILiveDevice deviceIB;
         private CaptureDeviceList devices = CaptureDeviceList.Instance;
         private List<Packet> packetList = new List<Packet>();
+        bool isCapturing = false;
 
         public Form1()
         {
@@ -45,17 +48,24 @@ namespace WinFormsApp1
             //deviceIB = devices[comboBoxDeviceIB.SelectedIndex];
 
 
-
+            isCapturing = true;
             Task.Run(() => StartPacketCapture());
         }
 
         private void buttonStopCapture_Click(object sender, EventArgs e)
         {
+            if (isCapturing == false || packetList.Count == 0)
+            {
+                MessageBox.Show("Capture not started.");
+                return;
+            }
+
             deviceIA.Close();
             byte[] data = packetList.ElementAt(packetList.Count - 1).PayloadPacket.PayloadPacket.PayloadData;
             string a = Encoding.UTF8.GetString(data);
             //textBox1.Text = a;
             //deviceIB?.Close();
+            isCapturing = false;
         }
 
         private void StartPacketCapture()
@@ -139,6 +149,140 @@ namespace WinFormsApp1
             }
         }
 
-        
+        bool CorrectInfoFormat(string sourIP, string destIP, string sourPort, string destPort)
+        {
+            if (!IPAddress.TryParse(sourIP, out IPAddress _) && !string.IsNullOrEmpty(sourIP)) 
+                return false;
+            if(!IPAddress.TryParse(destIP, out IPAddress _))
+                return false;
+            if (!int.TryParse(sourPort, out int _) && !string.IsNullOrEmpty(sourPort))
+                return false;
+            if (!int.TryParse(destPort, out int _))
+                return false;
+            return true;
+        }
+
+        private string GetLocalSourceIP()
+        {
+            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && ni.OperationalStatus == OperationalStatus.Up)
+                {
+                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            return ip.Address.ToString();
+                        }
+                    }
+                }
+            }
+            throw new Exception("IP Address Not Found for the selected device!");
+        }
+        private int GetSourcePort()
+        {
+            var listener = new System.Net.Sockets.TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
+
+        private void Send_packet_Click(object sender, EventArgs e)
+        {
+            if (comboBoxDeviceIA.SelectedIndex == -1 || comboBoxDeviceIB.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select both network interfaces.");
+                return;
+            }
+
+            if (packetList.Count == 0)
+            {
+                MessageBox.Show("No packets to send.");
+                return;
+            }
+            
+            deviceIB = (ILiveDevice)devices[comboBoxDeviceIB.SelectedIndex];
+
+            if(!CorrectInfoFormat(Sour_IP_textBox.Text, Dest_IP_textBox.Text, Sour_Port_textBox.Text, Dest_Port_textBox.Text))
+            {
+                MessageBox.Show("Enter the correct format for each infomation.");
+                return;
+            }
+
+            string sentsourceIP = Sour_IP_textBox.Text;
+            if (string.IsNullOrWhiteSpace(sentsourceIP))
+            {
+                sentsourceIP = GetLocalSourceIP();
+            }
+
+            string sentdestinationIP = Dest_IP_textBox.Text;
+            int sentsourcePort;
+            if (string.IsNullOrWhiteSpace(Sour_Port_textBox.Text))
+            {
+                sentsourcePort = GetSourcePort();
+            }
+            else
+            {
+                sentsourcePort = int.Parse(Sour_Port_textBox.Text);
+            }
+
+            int sentdestinationPort = int.Parse(Dest_Port_textBox.Text);
+
+            Task.Run(() => StartSendingPacket(sentsourceIP,sentdestinationIP,sentsourcePort,sentdestinationPort));
+            
+        }
+
+        private void StartSendingPacket(string sentsourceIP, string sentdestinationIP, int sentsourcePort, int sentdestinationPort)
+        {
+            try
+            {
+                deviceIB.Open();
+                foreach (var packet in packetList)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                        {
+                            // Modify the source and destination IP addresses
+                            ipPacket.SourceAddress = IPAddress.Parse(sentsourceIP);
+                            ipPacket.DestinationAddress = IPAddress.Parse(sentdestinationIP);
+
+                            if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                            {
+                                // Modify the source and destination ports
+                                tcpPacket.SourcePort = (ushort)sentsourcePort;
+                                tcpPacket.DestinationPort = (ushort)sentdestinationPort;
+
+                                // Recalculate the checksum
+                                tcpPacket.UpdateCalculatedValues();
+                                ipPacket.UpdateCalculatedValues();
+                            }
+                            else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                            {
+                                // Modify the source and destination ports
+                                udpPacket.SourcePort = (ushort)sentsourcePort;
+                                udpPacket.DestinationPort = (ushort)sentdestinationPort;
+
+                                // Recalculate the checksum
+                                udpPacket.UpdateCalculatedValues();
+                                ipPacket.UpdateCalculatedValues();
+                            }
+                        }
+
+                        // Send the modified packet
+                        deviceIB.SendPacket(ethernetPacket);
+                    }
+                }
+
+                deviceIB.Close();
+                MessageBox.Show("Packets sent successfully.");
+
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine($"Error capturing traffic: {ex.Message}");
+            }
+        }
     }
 }

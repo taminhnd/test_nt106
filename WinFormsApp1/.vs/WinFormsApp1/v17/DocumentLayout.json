@@ -1,18 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\",
+  "WorkspaceRootPath": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\quanp\\source\\repos\\test_nt106\\winformsapp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\quoc\\documents\\github\\git_do_an\\minhtam_update\\test_nt106\\winformsapp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\quanp\\source\\repos\\test_nt106\\winformsapp1\\winformsapp1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\winformsapp1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\quanp\\source\\repos\\test_nt106\\winformsapp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9893792D-89AE-42EA-B3DE-85C2CD182FD5}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,59 +22,31 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
               "RelativeDocumentMoniker": "WinFormsApp1\\Form1.cs",
-              "ToolTip": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs [Design]",
+              "ToolTip": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs [Design]",
               "RelativeToolTip": "WinFormsApp1\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-07T14:46:15.994Z",
               "EditorCaption": " [Design]"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:2:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Form1.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "WinFormsApp1\\Form1.Designer.cs",
-              "ToolTip": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
               "RelativeToolTip": "WinFormsApp1\\Form1.Designer.cs",
               "ViewState": "AQIAAFIAAAAAAAAAAAAtwF8AAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -83,13 +55,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "DocumentMoniker": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
               "RelativeDocumentMoniker": "WinFormsApp1\\Form1.cs",
-              "ToolTip": "C:\\Users\\quanp\\source\\repos\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "ToolTip": "C:\\Users\\Quoc\\Documents\\GitHub\\Git_do_an\\MinhTam_update\\test_nt106\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
               "RelativeToolTip": "WinFormsApp1\\Form1.cs",
-              "ViewState": "AQIAAIIAAAAAAAAAAAApwI0AAAAIAAAA",
+              "ViewState": "AQIAAPsAAAAAAAAAAAAcwBIBAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-05T02:59:56.126Z",
               "EditorCaption": ""
@@ -102,11 +74,39 @@
           "Children": [
             {
               "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 446,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 446,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             }
           ]
         }
