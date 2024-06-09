@@ -40,12 +40,14 @@
             Dest_IP_textBox = new TextBox();
             Sour_Port_textBox = new TextBox();
             panel1 = new Panel();
-            Dest_Port_textBox = new TextBox();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
-            label6 = new Label();
             label7 = new Label();
+            label6 = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            Dest_Port_textBox = new TextBox();
+            label8 = new Label();
+            sentpacket_counts_label = new Label();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -206,38 +208,14 @@
             panel1.Size = new Size(455, 179);
             panel1.TabIndex = 13;
             // 
-            // Dest_Port_textBox
+            // label7
             // 
-            Dest_Port_textBox.Location = new Point(191, 114);
-            Dest_Port_textBox.Name = "Dest_Port_textBox";
-            Dest_Port_textBox.Size = new Size(261, 27);
-            Dest_Port_textBox.TabIndex = 13;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(3, 15);
-            label3.Name = "label3";
-            label3.Size = new Size(70, 20);
-            label3.TabIndex = 14;
-            label3.Text = "Source IP";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(3, 33);
-            label4.Name = "label4";
-            label4.Size = new Size(0, 20);
-            label4.TabIndex = 15;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(3, 81);
-            label5.Name = "label5";
-            label5.Size = new Size(101, 20);
-            label5.TabIndex = 16;
-            label5.Text = "Destination IP";
+            label7.AutoSize = true;
+            label7.Location = new Point(3, 114);
+            label7.Name = "label7";
+            label7.Size = new Size(115, 20);
+            label7.TabIndex = 18;
+            label7.Text = "Destination Port";
             // 
             // label6
             // 
@@ -248,18 +226,62 @@
             label6.TabIndex = 17;
             label6.Text = "Source Port";
             // 
-            // label7
+            // label5
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(3, 114);
-            label7.Name = "label7";
-            label7.Size = new Size(115, 20);
-            label7.TabIndex = 18;
-            label7.Text = "Destination Port";
+            label5.AutoSize = true;
+            label5.Location = new Point(3, 81);
+            label5.Name = "label5";
+            label5.Size = new Size(101, 20);
+            label5.TabIndex = 16;
+            label5.Text = "Destination IP";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 33);
+            label4.Name = "label4";
+            label4.Size = new Size(0, 20);
+            label4.TabIndex = 15;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(3, 15);
+            label3.Name = "label3";
+            label3.Size = new Size(70, 20);
+            label3.TabIndex = 14;
+            label3.Text = "Source IP";
+            // 
+            // Dest_Port_textBox
+            // 
+            Dest_Port_textBox.Location = new Point(191, 114);
+            Dest_Port_textBox.Name = "Dest_Port_textBox";
+            Dest_Port_textBox.Size = new Size(261, 27);
+            Dest_Port_textBox.TabIndex = 13;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(980, 320);
+            label8.Name = "label8";
+            label8.Size = new Size(91, 20);
+            label8.TabIndex = 14;
+            label8.Text = "Packets sent:";
+            // 
+            // sentpacket_counts_label
+            // 
+            sentpacket_counts_label.AutoSize = true;
+            sentpacket_counts_label.Location = new Point(1168, 320);
+            sentpacket_counts_label.Name = "sentpacket_counts_label";
+            sentpacket_counts_label.Size = new Size(17, 20);
+            sentpacket_counts_label.TabIndex = 15;
+            sentpacket_counts_label.Text = "0";
             // 
             // Form1
             // 
             ClientSize = new Size(1433, 545);
+            Controls.Add(sentpacket_counts_label);
+            Controls.Add(label8);
             Controls.Add(panel1);
             Controls.Add(Send_packet);
             Controls.Add(label2);
@@ -300,5 +322,7 @@
         private Label label4;
         private Label label3;
         private TextBox Dest_Port_textBox;
+        private Label label8;
+        private Label sentpacket_counts_label;
     }
 }
