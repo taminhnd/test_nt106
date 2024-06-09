@@ -12,7 +12,7 @@ using SharpPcap.LibPcap;
 
 namespace WinFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         private ICaptureDevice deviceIA;
         private ILiveDevice deviceIB;
@@ -20,7 +20,7 @@ namespace WinFormsApp1
         private List<Packet> packetList = new List<Packet>();
         bool isCapturing = false;
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
         }
@@ -93,12 +93,11 @@ namespace WinFormsApp1
                                     var sourceMAC = ethernetPacket.SourceHardwareAddress;
                                     var destinationMAC = ethernetPacket.DestinationHardwareAddress;
 
-                                    if (listBoxPackets.InvokeRequired)
+                                    if (listViewPackets.InvokeRequired)
                                     {
-                                        listBoxPackets.Invoke(new MethodInvoker(delegate
+                                        listViewPackets.Invoke(new MethodInvoker(delegate
                                         {
-                                            /*listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
-                                            listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;*/
+
                                             var item = new ListViewItem(new[]
                                             {
                                                 listViewPackets.Items.Count.ToString(),
@@ -116,8 +115,7 @@ namespace WinFormsApp1
                                     }
                                     else
                                     {
-                                        /*listBoxPackets.Items.Add($"Packet: Source IP: {sourceIp}, Source Port: {sourcePort}, Destination IP: {destinationIp}, Destination Port: {destinationPort}");
-                                        listBoxPackets.TopIndex = listBoxPackets.Items.Count - 1;*/
+
                                         var item = new ListViewItem(new[]
                                         {
                                             listViewPackets.Items.Count.ToString(),
@@ -151,9 +149,9 @@ namespace WinFormsApp1
 
         bool CorrectInfoFormat(string sourIP, string destIP, string sourPort, string destPort)
         {
-            if (!IPAddress.TryParse(sourIP, out IPAddress _) && !string.IsNullOrEmpty(sourIP)) 
+            if (!IPAddress.TryParse(sourIP, out IPAddress _) && !string.IsNullOrEmpty(sourIP))
                 return false;
-            if(!IPAddress.TryParse(destIP, out IPAddress _))
+            if (!IPAddress.TryParse(destIP, out IPAddress _))
                 return false;
             if (!int.TryParse(sourPort, out int _) && !string.IsNullOrEmpty(sourPort))
                 return false;
@@ -218,7 +216,7 @@ namespace WinFormsApp1
             var devices = CaptureDeviceList.Instance;
             deviceIB = devices[comboBoxDeviceIB.SelectedIndex];
 
-            if(!CorrectInfoFormat(Sour_IP_textBox.Text, Dest_IP_textBox.Text, Sour_Port_textBox.Text, Dest_Port_textBox.Text))
+            if (!CorrectInfoFormat(Sour_IP_textBox.Text, Dest_IP_textBox.Text, Sour_Port_textBox.Text, Dest_Port_textBox.Text))
             {
                 MessageBox.Show("Enter the correct format for each infomation.");
                 return;
@@ -242,15 +240,15 @@ namespace WinFormsApp1
             }
 
             int sentdestinationPort = int.Parse(Dest_Port_textBox.Text);
-            
+
             if (!IsDeviceAvailable(deviceIB))
             {
                 MessageBox.Show("The selected device is not available.");
                 return;
             }
 
-            Task.Run(() => StartSendingPacket(sentsourceIP,sentdestinationIP,sentsourcePort,sentdestinationPort));
-            
+            Task.Run(() => StartSendingPacket(sentsourceIP, sentdestinationIP, sentsourcePort, sentdestinationPort));
+
         }
 
         private void StartSendingPacket(string sentsourceIP, string sentdestinationIP, int sentsourcePort, int sentdestinationPort)
@@ -302,7 +300,8 @@ namespace WinFormsApp1
                         sentPacketCount++; // Tăng biến đếm số gói tin đã gửi
 
                         // Cập nhật label hiển thị số gói tin đã gửi
-                        this.Invoke((MethodInvoker)delegate {
+                        this.Invoke((MethodInvoker)delegate
+                        {
                             sentpacket_counts_label.Text = sentPacketCount.ToString();
                         });
                     }
@@ -318,6 +317,65 @@ namespace WinFormsApp1
             catch (Exception ex)
             {
                 MessageBox.Show($"Error sending packets: {ex.Message}");
+            }
+        }
+        private void Center()
+        {
+            // Tính toán vị trí mới của Panel để nó ở giữa Form
+            panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
+            listViewPackets.Left = (this.ClientSize.Width - listViewPackets.Width) / 2;
+        }
+
+        private void Main_Resize(object sender, EventArgs e)
+        {
+            Center();
+        }
+
+
+        private void DisplayPacketDetails(Packet packet)
+        {
+            StringBuilder packetDetails = new StringBuilder();
+
+            if (packet is EthernetPacket ethernetPacket)
+            {
+                packetDetails.AppendLine("Ethernet Packet:");
+                packetDetails.AppendLine($"Source MAC: {ethernetPacket.SourceHardwareAddress}");
+                packetDetails.AppendLine($"Destination MAC: {ethernetPacket.DestinationHardwareAddress}");
+
+                if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                {
+                    packetDetails.AppendLine("\nIP Packet:");
+                    packetDetails.AppendLine($"Source IP: {ipPacket.SourceAddress}");
+                    packetDetails.AppendLine($"Destination IP: {ipPacket.DestinationAddress}");
+
+                    if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                    {
+                        packetDetails.AppendLine("\nTCP Packet:");
+                        packetDetails.AppendLine($"Source Port: {tcpPacket.SourcePort}");
+                        packetDetails.AppendLine($"Destination Port: {tcpPacket.DestinationPort}");
+                        packetDetails.AppendLine($"Payload: {BitConverter.ToString(tcpPacket.PayloadData).Replace("-", " ")}");
+                    }
+                    else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                    {
+                        packetDetails.AppendLine("\nUDP Packet:");
+                        packetDetails.AppendLine($"Source Port: {udpPacket.SourcePort}");
+                        packetDetails.AppendLine($"Destination Port: {udpPacket.DestinationPort}");
+                        packetDetails.AppendLine($"Payload: {BitConverter.ToString(udpPacket.PayloadData).Replace("-", " ")}");
+                    }
+                }
+            }
+
+            MessageBox.Show(packetDetails.ToString(), "Packet Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        private void listViewPackets_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewPackets.SelectedItems.Count > 0)
+            {
+                int selectedIndex = listViewPackets.SelectedItems[0].Index;
+                Packet selectedPacket = packetList[selectedIndex];
+                DisplayPacketDetails(selectedPacket);
             }
         }
     }
