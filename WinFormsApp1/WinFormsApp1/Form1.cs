@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net;
@@ -64,7 +64,7 @@ namespace WinFormsApp1
             byte[] data = packetList.ElementAt(packetList.Count - 1).PayloadPacket.PayloadPacket.PayloadData;
             string a = Encoding.UTF8.GetString(data);
             //textBox1.Text = a;
-            //deviceIB?.Close();
+            //deviceIB.Close();
             isCapturing = false;
         }
 
@@ -162,11 +162,12 @@ namespace WinFormsApp1
             return true;
         }
 
-        private string GetLocalSourceIP()
+        private string GetLocalSourceIP(ILiveDevice device)
         {
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 && ni.OperationalStatus == OperationalStatus.Up)
+                // Check if the network interface matches the description of deviceIB
+                if (ni.Description == device.Description && ni.OperationalStatus == OperationalStatus.Up)
                 {
                     foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
                     {
@@ -201,8 +202,9 @@ namespace WinFormsApp1
                 MessageBox.Show("No packets to send.");
                 return;
             }
-            
-            deviceIB = (ILiveDevice)devices[comboBoxDeviceIB.SelectedIndex];
+
+            var devices = CaptureDeviceList.Instance;
+            deviceIB = devices[comboBoxDeviceIB.SelectedIndex];
 
             if(!CorrectInfoFormat(Sour_IP_textBox.Text, Dest_IP_textBox.Text, Sour_Port_textBox.Text, Dest_Port_textBox.Text))
             {
@@ -213,7 +215,7 @@ namespace WinFormsApp1
             string sentsourceIP = Sour_IP_textBox.Text;
             if (string.IsNullOrWhiteSpace(sentsourceIP))
             {
-                sentsourceIP = GetLocalSourceIP();
+                sentsourceIP = GetLocalSourceIP(deviceIB);
             }
 
             string sentdestinationIP = Dest_IP_textBox.Text;
@@ -237,7 +239,16 @@ namespace WinFormsApp1
         {
             try
             {
+                MessageBox.Show("Opening device IB");
                 deviceIB.Open();
+                deviceIA.Open();
+
+                if (packetList.Count == 0)
+                {
+                    Console.WriteLine("Packet list is empty. Nothing to send.");
+                    return;
+                }
+
                 foreach (var packet in packetList)
                 {
                     if (packet is EthernetPacket ethernetPacket)
@@ -269,19 +280,25 @@ namespace WinFormsApp1
                                 ipPacket.UpdateCalculatedValues();
                             }
                         }
-
+                        
                         // Send the modified packet
                         deviceIB.SendPacket(ethernetPacket);
                     }
+                    else
+                    {
+                        MessageBox.Show("Packet is not an EthernetPacket.");
+                    }
                 }
 
+                deviceIA.Close();
                 deviceIB.Close();
                 MessageBox.Show("Packets sent successfully.");
 
             }
-            catch ( Exception ex )
+
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error capturing traffic: {ex.Message}");
+                MessageBox.Show($"Error sending packets: {ex.Message}");
             }
         }
     }
