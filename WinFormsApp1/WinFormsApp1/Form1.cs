@@ -241,58 +241,59 @@ namespace WinFormsApp1
             {
                 MessageBox.Show("Opening device IB");
                 deviceIB.Open();
-                deviceIA.Open();
-
-                if (packetList.Count == 0)
+                deviceIB.OnPacketArrival += (sender, e) =>
                 {
-                    Console.WriteLine("Packet list is empty. Nothing to send.");
-                    return;
-                }
-
-                foreach (var packet in packetList)
-                {
-                    if (packet is EthernetPacket ethernetPacket)
+                    if (packetList.Count == 0)
                     {
-                        if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                        Console.WriteLine("Packet list is empty. Nothing to send.");
+                        return;
+                    }
+
+                    foreach (var packet in packetList)
+                    {
+                        if (packet is EthernetPacket ethernetPacket)
                         {
-                            // Modify the source and destination IP addresses
-                            ipPacket.SourceAddress = IPAddress.Parse(sentsourceIP);
-                            ipPacket.DestinationAddress = IPAddress.Parse(sentdestinationIP);
-
-                            if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                            if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
                             {
-                                // Modify the source and destination ports
-                                tcpPacket.SourcePort = (ushort)sentsourcePort;
-                                tcpPacket.DestinationPort = (ushort)sentdestinationPort;
+                                // Modify the source and destination IP addresses
+                                ipPacket.SourceAddress = IPAddress.Parse(sentsourceIP);
+                                ipPacket.DestinationAddress = IPAddress.Parse(sentdestinationIP);
 
-                                // Recalculate the checksum
-                                tcpPacket.UpdateCalculatedValues();
-                                ipPacket.UpdateCalculatedValues();
-                            }
-                            else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
-                            {
-                                // Modify the source and destination ports
-                                udpPacket.SourcePort = (ushort)sentsourcePort;
-                                udpPacket.DestinationPort = (ushort)sentdestinationPort;
+                                if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                                {
+                                    // Modify the source and destination ports
+                                    tcpPacket.SourcePort = (ushort)sentsourcePort;
+                                    tcpPacket.DestinationPort = (ushort)sentdestinationPort;
 
-                                // Recalculate the checksum
-                                udpPacket.UpdateCalculatedValues();
-                                ipPacket.UpdateCalculatedValues();
+                                    // Recalculate the checksum
+                                    tcpPacket.UpdateCalculatedValues();
+                                    ipPacket.UpdateCalculatedValues();
+                                }
+                                else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                                {
+                                    // Modify the source and destination ports
+                                    udpPacket.SourcePort = (ushort)sentsourcePort;
+                                    udpPacket.DestinationPort = (ushort)sentdestinationPort;
+
+                                    // Recalculate the checksum
+                                    udpPacket.UpdateCalculatedValues();
+                                    ipPacket.UpdateCalculatedValues();
+                                }
                             }
+
+                            // Send the modified packet
+                            deviceIB.SendPacket(ethernetPacket);
                         }
-                        
-                        // Send the modified packet
-                        deviceIB.SendPacket(ethernetPacket);
+                        else
+                        {
+                            MessageBox.Show("Packet is not an EthernetPacket.");
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("Packet is not an EthernetPacket.");
-                    }
-                }
+                };
 
-                deviceIA.Close();
                 deviceIB.Close();
                 MessageBox.Show("Packets sent successfully.");
+     
 
             }
 
