@@ -328,7 +328,7 @@ namespace WinFormsApp1
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            Center();
+            //Center();
         }
 
 
@@ -379,6 +379,207 @@ namespace WinFormsApp1
             }
         }
 
-        
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Packet Files|*.pcap",
+                Title = "Save Packets"
+            };
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
+                {
+                    var writer = new BinaryWriter(fs);
+                    foreach (var packet in packetList)
+                    {
+                        var data = packet.Bytes;
+                        writer.Write(data.Length);
+                        writer.Write(data);
+                    }
+                }
+            }
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Packet Files|*.pcap",
+                Title = "Load Packets"
+            };
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (var fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    var reader = new BinaryReader(fs);
+                    packetList.Clear();
+                    while (fs.Position < fs.Length)
+                    {
+                        var length = reader.ReadInt32();
+                        var data = reader.ReadBytes(length);
+                        var packet = Packet.ParsePacket(LinkLayers.Ethernet, data);
+                        packetList.Add(packet);
+                        AddPacketToListView(packet);
+                    }
+                }
+            }
+        }
+
+        private void AddPacketToListView(Packet packet)
+        {
+            if (packet is EthernetPacket ethernetPacket)
+            {
+                if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                {
+                    if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                    {
+                        var item = new ListViewItem(new[]
+                        {
+                    listViewPackets.Items.Count.ToString(),
+                    ipPacket.SourceAddress.ToString(),
+                    ipPacket.DestinationAddress.ToString(),
+                    tcpPacket.SourcePort.ToString(),
+                    tcpPacket.DestinationPort.ToString(),
+                    ethernetPacket.SourceHardwareAddress.ToString(),
+                    ethernetPacket.DestinationHardwareAddress.ToString()
+                });
+                        listViewPackets.Items.Add(item);
+                        listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+                    }
+                    else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                    {
+                        var item = new ListViewItem(new[]
+                        {
+                    listViewPackets.Items.Count.ToString(),
+                    ipPacket.SourceAddress.ToString(),
+                    ipPacket.DestinationAddress.ToString(),
+                    udpPacket.SourcePort.ToString(),
+                    udpPacket.DestinationPort.ToString(),
+                    ethernetPacket.SourceHardwareAddress.ToString(),
+                    ethernetPacket.DestinationHardwareAddress.ToString()
+                });
+                        listViewPackets.Items.Add(item);
+                        listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+                    }
+                }
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            listViewPackets.Items.Clear();
+            packetList.Clear();
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files|*.txt|CSV Files|*.csv",
+                Title = "Export Packets"
+            };
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (var writer = new StreamWriter(saveFileDialog.FileName))
+                {
+                    foreach (var packet in packetList)
+                    {
+                        writer.WriteLine(packet.ToString());
+                    }
+                }
+            }
+        }
+
+        private void textBoxSourceIP_TextChanged(object sender, EventArgs e)
+        {
+            string searchText = textBoxSearch.Text.ToLower();
+            string searchCriteria = comboBoxSearch.SelectedItem.ToString();
+
+            var searchResults = packetList.Where(packet =>
+            {
+                if (packet is EthernetPacket ethernetPacket)
+                {
+                    if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                    {
+                        if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                        {
+                            switch (searchCriteria)
+                            {
+                                case "Source IP":
+                                    return ipPacket.SourceAddress.ToString().ToLower().Contains(searchText);
+                                case "Destination IP":
+                                    return ipPacket.DestinationAddress.ToString().ToLower().Contains(searchText);
+                                case "Source Port":
+                                    return tcpPacket.SourcePort.ToString().ToLower().Contains(searchText);
+                                case "Destination Port":
+                                    return tcpPacket.DestinationPort.ToString().ToLower().Contains(searchText);
+                            }
+                        }
+                        else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                        {
+                            switch (searchCriteria)
+                            {
+                                case "Source IP":
+                                    return ipPacket.SourceAddress.ToString().ToLower().Contains(searchText);
+                                case "Destination IP":
+                                    return ipPacket.DestinationAddress.ToString().ToLower().Contains(searchText);
+                                case "Source Port":
+                                    return udpPacket.SourcePort.ToString().ToLower().Contains(searchText);
+                                case "Destination Port":
+                                    return udpPacket.DestinationPort.ToString().ToLower().Contains(searchText);
+                            }
+                        }
+                    }
+                }
+                return false;
+            }).ToList();
+
+            DisplaySearchResults(searchResults);
+        }
+
+        private void DisplaySearchResults(List<Packet> searchResults)
+        {
+            listViewPackets.Items.Clear();
+            foreach (var packet in searchResults)
+            {
+                if (packet is EthernetPacket ethernetPacket)
+                {
+                    if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                    {
+                        if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                        {
+                            var item = new ListViewItem(new[]
+                            {
+                        listViewPackets.Items.Count.ToString(),
+                        ipPacket.SourceAddress.ToString(),
+                        ipPacket.DestinationAddress.ToString(),
+                        tcpPacket.SourcePort.ToString(),
+                        tcpPacket.DestinationPort.ToString(),
+                        ethernetPacket.SourceHardwareAddress.ToString(),
+                        ethernetPacket.DestinationHardwareAddress.ToString()
+                    });
+                            listViewPackets.Items.Add(item);
+                        }
+                        else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                        {
+                            var item = new ListViewItem(new[]
+                            {
+                        listViewPackets.Items.Count.ToString(),
+                        ipPacket.SourceAddress.ToString(),
+                        ipPacket.DestinationAddress.ToString(),
+                        udpPacket.SourcePort.ToString(),
+                        udpPacket.DestinationPort.ToString(),
+                        ethernetPacket.SourceHardwareAddress.ToString(),
+                        ethernetPacket.DestinationHardwareAddress.ToString()
+                    });
+                            listViewPackets.Items.Add(item);
+                        }
+                    }
+                }
+            }
+            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+        }
+
     }
 }
