@@ -46,8 +46,6 @@ namespace WinFormsApp1
             var devices = CaptureDeviceList.Instance;
 
             deviceIA = devices[comboBoxDeviceIA.SelectedIndex];
-            //deviceIB = devices[comboBoxDeviceIB.SelectedIndex];
-
 
             isCapturing = true;
             Task.Run(() => StartPacketCapture());
@@ -64,8 +62,6 @@ namespace WinFormsApp1
             deviceIA.Close();
             byte[] data = packetList.ElementAt(packetList.Count - 1).PayloadPacket.PayloadPacket.PayloadData;
             string a = Encoding.UTF8.GetString(data);
-            //textBox1.Text = a;
-            //deviceIB.Close();
             isCapturing = false;
         }
 
@@ -326,16 +322,14 @@ namespace WinFormsApp1
         }
         private void Center()
         {
-            // Tính toán vị trí mới của Panel để nó ở giữa Form
             panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
             listViewPackets.Left = (this.ClientSize.Width - listViewPackets.Width) / 2;
         }
 
         private void Main_Resize(object sender, EventArgs e)
         {
-            //Center();
+            Center();
         }
-
 
         private void DisplayPacketDetails(Packet packet)
         {
