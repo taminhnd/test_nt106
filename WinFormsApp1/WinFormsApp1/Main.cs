@@ -491,7 +491,51 @@ namespace WinFormsApp1
             }
         }
 
-        private void textBoxSourceIP_TextChanged(object sender, EventArgs e)
+
+        private void DisplaySearchResults(List<Packet> searchResults)
+        {
+            listViewPackets.Items.Clear();
+            foreach (var packet in searchResults)
+            {
+                if (packet is EthernetPacket ethernetPacket)
+                {
+                    if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                    {
+                        if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                        {
+                            var item = new ListViewItem(new[]
+                            {
+                        listViewPackets.Items.Count.ToString(),
+                        ipPacket.SourceAddress.ToString(),
+                        ipPacket.DestinationAddress.ToString(),
+                        tcpPacket.SourcePort.ToString(),
+                        tcpPacket.DestinationPort.ToString(),
+                        ethernetPacket.SourceHardwareAddress.ToString(),
+                        ethernetPacket.DestinationHardwareAddress.ToString()
+                    });
+                            listViewPackets.Items.Add(item);
+                        }
+                        else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
+                        {
+                            var item = new ListViewItem(new[]
+                            {
+                        listViewPackets.Items.Count.ToString(),
+                        ipPacket.SourceAddress.ToString(),
+                        ipPacket.DestinationAddress.ToString(),
+                        udpPacket.SourcePort.ToString(),
+                        udpPacket.DestinationPort.ToString(),
+                        ethernetPacket.SourceHardwareAddress.ToString(),
+                        ethernetPacket.DestinationHardwareAddress.ToString()
+                    });
+                            listViewPackets.Items.Add(item);
+                        }
+                    }
+                }
+            }
+            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
         {
             string searchText = textBoxSearch.Text.ToLower();
             string searchCriteria = comboBoxSearch.SelectedItem.ToString();
@@ -537,49 +581,5 @@ namespace WinFormsApp1
 
             DisplaySearchResults(searchResults);
         }
-
-        private void DisplaySearchResults(List<Packet> searchResults)
-        {
-            listViewPackets.Items.Clear();
-            foreach (var packet in searchResults)
-            {
-                if (packet is EthernetPacket ethernetPacket)
-                {
-                    if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
-                    {
-                        if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
-                        {
-                            var item = new ListViewItem(new[]
-                            {
-                        listViewPackets.Items.Count.ToString(),
-                        ipPacket.SourceAddress.ToString(),
-                        ipPacket.DestinationAddress.ToString(),
-                        tcpPacket.SourcePort.ToString(),
-                        tcpPacket.DestinationPort.ToString(),
-                        ethernetPacket.SourceHardwareAddress.ToString(),
-                        ethernetPacket.DestinationHardwareAddress.ToString()
-                    });
-                            listViewPackets.Items.Add(item);
-                        }
-                        else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
-                        {
-                            var item = new ListViewItem(new[]
-                            {
-                        listViewPackets.Items.Count.ToString(),
-                        ipPacket.SourceAddress.ToString(),
-                        ipPacket.DestinationAddress.ToString(),
-                        udpPacket.SourcePort.ToString(),
-                        udpPacket.DestinationPort.ToString(),
-                        ethernetPacket.SourceHardwareAddress.ToString(),
-                        ethernetPacket.DestinationHardwareAddress.ToString()
-                    });
-                            listViewPackets.Items.Add(item);
-                        }
-                    }
-                }
-            }
-            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
-        }
-
     }
 }

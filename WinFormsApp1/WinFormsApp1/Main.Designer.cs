@@ -48,6 +48,7 @@
             label4 = new Label();
             btnDelete = new Button();
             btnExport = new Button();
+            btnSearch = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -62,7 +63,7 @@
             listViewPackets.FullRowSelect = true;
             listViewPackets.Location = new Point(12, 256);
             listViewPackets.Name = "listViewPackets";
-            listViewPackets.Size = new Size(1567, 647);
+            listViewPackets.Size = new Size(1567, 751);
             listViewPackets.TabIndex = 6;
             listViewPackets.UseCompatibleStateImageBehavior = false;
             listViewPackets.View = View.Details;
@@ -284,6 +285,7 @@
             // 
             panel1.Anchor = AnchorStyles.Top;
             panel1.BackColor = SystemColors.GradientInactiveCaption;
+            panel1.Controls.Add(btnSearch);
             panel1.Controls.Add(comboBoxSearch);
             panel1.Controls.Add(textBoxSearch);
             panel1.Controls.Add(label4);
@@ -318,7 +320,7 @@
             // 
             comboBoxSearch.FormattingEnabled = true;
             comboBoxSearch.Items.AddRange(new object[] { "Source IP", "Destination IP", "Source Port", "Destination Port" });
-            comboBoxSearch.Location = new Point(800, 199);
+            comboBoxSearch.Location = new Point(800, 151);
             comboBoxSearch.Name = "comboBoxSearch";
             comboBoxSearch.Size = new Size(232, 40);
             comboBoxSearch.TabIndex = 25;
@@ -326,16 +328,15 @@
             // textBoxSearch
             // 
             textBoxSearch.BackColor = SystemColors.Menu;
-            textBoxSearch.Location = new Point(1038, 199);
+            textBoxSearch.Location = new Point(1038, 151);
             textBoxSearch.Name = "textBoxSearch";
             textBoxSearch.Size = new Size(526, 39);
             textBoxSearch.TabIndex = 24;
-            textBoxSearch.TextChanged += textBoxSourceIP_TextChanged;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(704, 202);
+            label4.Location = new Point(704, 154);
             label4.Name = "label4";
             label4.Size = new Size(90, 32);
             label4.TabIndex = 23;
@@ -363,10 +364,21 @@
             btnExport.UseVisualStyleBackColor = false;
             btnExport.Click += btnExport_Click;
             // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = SystemColors.ButtonHighlight;
+            btnSearch.Location = new Point(1304, 196);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(260, 42);
+            btnSearch.TabIndex = 26;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // Main
             // 
             BackColor = SystemColors.MenuBar;
-            ClientSize = new Size(1591, 915);
+            ClientSize = new Size(1591, 1019);
             Controls.Add(panel1);
             Controls.Add(listViewPackets);
             Name = "Main";
@@ -411,5 +423,6 @@
         private TextBox textBoxSearch;
         private Label label4;
         private ComboBox comboBoxSearch;
+        private Button btnSearch;
     }
 }
