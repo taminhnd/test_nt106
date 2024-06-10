@@ -43,12 +43,12 @@
             btnLoad = new Button();
             btnSave = new Button();
             panel1 = new Panel();
+            btnSearch = new Button();
             comboBoxSearch = new ComboBox();
             textBoxSearch = new TextBox();
             label4 = new Label();
             btnDelete = new Button();
             btnExport = new Button();
-            btnSearch = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -107,18 +107,18 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(859, 106);
+            label8.Location = new Point(789, 106);
             label8.Name = "label8";
-            label8.Size = new Size(149, 32);
+            label8.Size = new Size(230, 28);
             label8.TabIndex = 14;
-            label8.Text = "Packets sent:";
+            label8.Text = "Suscessfully packets sent:";
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Location = new Point(704, 59);
             label6.Name = "label6";
-            label6.Size = new Size(136, 32);
+            label6.Size = new Size(113, 28);
             label6.TabIndex = 17;
             label6.Text = "Source Port";
             // 
@@ -127,7 +127,7 @@
             Dest_IP_textBox.BackColor = SystemColors.Menu;
             Dest_IP_textBox.Location = new Point(1304, 9);
             Dest_IP_textBox.Name = "Dest_IP_textBox";
-            Dest_IP_textBox.Size = new Size(261, 39);
+            Dest_IP_textBox.Size = new Size(261, 34);
             Dest_IP_textBox.TabIndex = 11;
             // 
             // Dest_Port_textBox
@@ -135,7 +135,7 @@
             Dest_Port_textBox.BackColor = SystemColors.Menu;
             Dest_Port_textBox.Location = new Point(1304, 54);
             Dest_Port_textBox.Name = "Dest_Port_textBox";
-            Dest_Port_textBox.Size = new Size(261, 39);
+            Dest_Port_textBox.Size = new Size(261, 34);
             Dest_Port_textBox.TabIndex = 13;
             // 
             // buttonStopCapture
@@ -154,7 +154,7 @@
             label3.AutoSize = true;
             label3.Location = new Point(704, 12);
             label3.Name = "label3";
-            label3.Size = new Size(113, 32);
+            label3.Size = new Size(93, 28);
             label3.TabIndex = 14;
             label3.Text = "Source IP";
             // 
@@ -163,7 +163,7 @@
             label5.AutoSize = true;
             label5.Location = new Point(1113, 12);
             label5.Name = "label5";
-            label5.Size = new Size(162, 32);
+            label5.Size = new Size(133, 28);
             label5.TabIndex = 16;
             label5.Text = "Destination IP";
             // 
@@ -184,7 +184,7 @@
             comboBoxDeviceIB.FormattingEnabled = true;
             comboBoxDeviceIB.Location = new Point(125, 51);
             comboBoxDeviceIB.Name = "comboBoxDeviceIB";
-            comboBoxDeviceIB.Size = new Size(573, 40);
+            comboBoxDeviceIB.Size = new Size(573, 36);
             comboBoxDeviceIB.TabIndex = 1;
             // 
             // Sour_Port_textBox
@@ -192,7 +192,7 @@
             Sour_Port_textBox.BackColor = SystemColors.Menu;
             Sour_Port_textBox.Location = new Point(846, 54);
             Sour_Port_textBox.Name = "Sour_Port_textBox";
-            Sour_Port_textBox.Size = new Size(261, 39);
+            Sour_Port_textBox.Size = new Size(261, 34);
             Sour_Port_textBox.TabIndex = 12;
             // 
             // comboBoxDeviceIA
@@ -201,7 +201,7 @@
             comboBoxDeviceIA.FormattingEnabled = true;
             comboBoxDeviceIA.Location = new Point(125, 4);
             comboBoxDeviceIA.Name = "comboBoxDeviceIA";
-            comboBoxDeviceIA.Size = new Size(573, 40);
+            comboBoxDeviceIA.Size = new Size(573, 36);
             comboBoxDeviceIA.TabIndex = 0;
             // 
             // sentpacket_counts_label
@@ -209,7 +209,7 @@
             sentpacket_counts_label.AutoSize = true;
             sentpacket_counts_label.Location = new Point(1047, 106);
             sentpacket_counts_label.Name = "sentpacket_counts_label";
-            sentpacket_counts_label.Size = new Size(27, 32);
+            sentpacket_counts_label.Size = new Size(23, 28);
             sentpacket_counts_label.TabIndex = 15;
             sentpacket_counts_label.Text = "0";
             // 
@@ -218,7 +218,7 @@
             Sour_IP_textBox.BackColor = SystemColors.Menu;
             Sour_IP_textBox.Location = new Point(846, 9);
             Sour_IP_textBox.Name = "Sour_IP_textBox";
-            Sour_IP_textBox.Size = new Size(261, 39);
+            Sour_IP_textBox.Size = new Size(261, 34);
             Sour_IP_textBox.TabIndex = 10;
             // 
             // label1
@@ -226,7 +226,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(6, 7);
             label1.Name = "label1";
-            label1.Size = new Size(114, 32);
+            label1.Size = new Size(93, 28);
             label1.TabIndex = 7;
             label1.Text = "Device IA";
             // 
@@ -235,7 +235,7 @@
             label7.AutoSize = true;
             label7.Location = new Point(1113, 57);
             label7.Name = "label7";
-            label7.Size = new Size(185, 32);
+            label7.Size = new Size(153, 28);
             label7.TabIndex = 18;
             label7.Text = "Destination Port";
             // 
@@ -244,7 +244,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(7, 54);
             label2.Name = "label2";
-            label2.Size = new Size(113, 32);
+            label2.Size = new Size(91, 28);
             label2.TabIndex = 8;
             label2.Text = "Device IB";
             // 
@@ -316,13 +316,24 @@
             panel1.Size = new Size(1567, 246);
             panel1.TabIndex = 19;
             // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = SystemColors.ButtonHighlight;
+            btnSearch.Location = new Point(1304, 196);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(260, 42);
+            btnSearch.TabIndex = 26;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // comboBoxSearch
             // 
             comboBoxSearch.FormattingEnabled = true;
             comboBoxSearch.Items.AddRange(new object[] { "Source IP", "Destination IP", "Source Port", "Destination Port" });
             comboBoxSearch.Location = new Point(800, 151);
             comboBoxSearch.Name = "comboBoxSearch";
-            comboBoxSearch.Size = new Size(232, 40);
+            comboBoxSearch.Size = new Size(232, 36);
             comboBoxSearch.TabIndex = 25;
             // 
             // textBoxSearch
@@ -330,7 +341,7 @@
             textBoxSearch.BackColor = SystemColors.Menu;
             textBoxSearch.Location = new Point(1038, 151);
             textBoxSearch.Name = "textBoxSearch";
-            textBoxSearch.Size = new Size(526, 39);
+            textBoxSearch.Size = new Size(526, 34);
             textBoxSearch.TabIndex = 24;
             // 
             // label4
@@ -338,7 +349,7 @@
             label4.AutoSize = true;
             label4.Location = new Point(704, 154);
             label4.Name = "label4";
-            label4.Size = new Size(90, 32);
+            label4.Size = new Size(74, 28);
             label4.TabIndex = 23;
             label4.Text = "Search:";
             // 
@@ -363,17 +374,6 @@
             btnExport.Text = "Export";
             btnExport.UseVisualStyleBackColor = false;
             btnExport.Click += btnExport_Click;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = SystemColors.ButtonHighlight;
-            btnSearch.Location = new Point(1304, 196);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(260, 42);
-            btnSearch.TabIndex = 26;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
-            btnSearch.Click += btnSearch_Click;
             // 
             // Main
             // 

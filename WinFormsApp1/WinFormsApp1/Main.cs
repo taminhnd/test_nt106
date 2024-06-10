@@ -164,7 +164,6 @@ namespace WinFormsApp1
         {
             foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
             {
-                // Check if the network interface matches the description of deviceIB
                 if (ni.Description == device.Description && ni.OperationalStatus == OperationalStatus.Up)
                 {
                     foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
@@ -263,6 +262,7 @@ namespace WinFormsApp1
                     return;
                 }
 
+                int packetnumber = 1;
                 int sentPacketCount = 0;
                 foreach (var packet in packetList)
                 {
@@ -270,40 +270,41 @@ namespace WinFormsApp1
                     {
                         if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
                         {
-                            // Modify the source and destination IP addresses
                             ipPacket.SourceAddress = IPAddress.Parse(sentsourceIP);
                             ipPacket.DestinationAddress = IPAddress.Parse(sentdestinationIP);
 
                             if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
                             {
-                                // Modify the source and destination ports
                                 tcpPacket.SourcePort = (ushort)sentsourcePort;
                                 tcpPacket.DestinationPort = (ushort)sentdestinationPort;
 
-                                // Recalculate the checksum
                                 tcpPacket.UpdateCalculatedValues();
                                 ipPacket.UpdateCalculatedValues();
                             }
                             else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
                             {
-                                // Modify the source and destination ports
                                 udpPacket.SourcePort = (ushort)sentsourcePort;
                                 udpPacket.DestinationPort = (ushort)sentdestinationPort;
 
-                                // Recalculate the checksum
                                 udpPacket.UpdateCalculatedValues();
                                 ipPacket.UpdateCalculatedValues();
                             }
                         }
-                        // Send the modified packet
-                        deviceIB.SendPacket(ethernetPacket);
-                        sentPacketCount++; // Tăng biến đếm số gói tin đã gửi
 
-                        // Cập nhật label hiển thị số gói tin đã gửi
-                        this.Invoke((MethodInvoker)delegate
+                        try
                         {
-                            sentpacket_counts_label.Text = sentPacketCount.ToString();
-                        });
+                            deviceIB.SendPacket(ethernetPacket);
+                            sentPacketCount++;
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                sentpacket_counts_label.Text = sentPacketCount.ToString();
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        
                     }
                     else
                     {
@@ -311,7 +312,7 @@ namespace WinFormsApp1
                     }
                 }
                 deviceIB.Close();
-                MessageBox.Show("Packets sent successfully.");
+                MessageBox.Show("All packets sent");
             }
 
             catch (Exception ex)
