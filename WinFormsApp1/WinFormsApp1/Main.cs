@@ -19,7 +19,8 @@ namespace WinFormsApp1
         private CaptureDeviceList devices = CaptureDeviceList.Instance;
         private List<Packet> packetList = new List<Packet>();
         bool isCapturing = false;
-
+        string fil = "";
+        int filter = 6;
         public Main()
         {
             InitializeComponent();
@@ -80,26 +81,28 @@ namespace WinFormsApp1
                         var packet = Packet.ParsePacket(e.GetPacket().LinkLayerType, e.GetPacket().Data);
                         packetList.Add(packet);
 
-                        if (packet is EthernetPacket ethernetPacket)
+                        if (Filter(packet))
                         {
-                            if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                            if (packet is EthernetPacket ethernetPacket)
                             {
-                                if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                                if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
                                 {
-                                    var sourceIp = ipPacket.SourceAddress;
-                                    var destinationIp = ipPacket.DestinationAddress;
-                                    var sourcePort = tcpPacket.SourcePort;
-                                    var destinationPort = tcpPacket.DestinationPort;
-                                    var sourceMAC = ethernetPacket.SourceHardwareAddress;
-                                    var destinationMAC = ethernetPacket.DestinationHardwareAddress;
-
-                                    if (listViewPackets.InvokeRequired)
+                                    if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
                                     {
-                                        listViewPackets.Invoke(new MethodInvoker(delegate
-                                        {
+                                        var sourceIp = ipPacket.SourceAddress;
+                                        var destinationIp = ipPacket.DestinationAddress;
+                                        var sourcePort = tcpPacket.SourcePort;
+                                        var destinationPort = tcpPacket.DestinationPort;
+                                        var sourceMAC = ethernetPacket.SourceHardwareAddress;
+                                        var destinationMAC = ethernetPacket.DestinationHardwareAddress;
 
-                                            var item = new ListViewItem(new[]
+                                        if (listViewPackets.InvokeRequired)
+                                        {
+                                            listViewPackets.Invoke(new MethodInvoker(delegate
                                             {
+
+                                                var item = new ListViewItem(new[]
+                                                {
                                                 listViewPackets.Items.Count.ToString(),
                                                 sourceIp.ToString(),
                                                 destinationIp.ToString(),
@@ -107,17 +110,17 @@ namespace WinFormsApp1
                                                 destinationPort.ToString(),
                                                 sourceMAC.ToString(),
                                                 destinationMAC.ToString()
-                                            });
-                                            listViewPackets.Items.Add(item);
-                                            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
-                                        }));
+                                                });
+                                                listViewPackets.Items.Add(item);
+                                                listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+                                            }));
 
-                                    }
-                                    else
-                                    {
-
-                                        var item = new ListViewItem(new[]
+                                        }
+                                        else
                                         {
+
+                                            var item = new ListViewItem(new[]
+                                            {
                                             listViewPackets.Items.Count.ToString(),
                                             sourceIp.ToString(),
                                             destinationIp.ToString(),
@@ -126,8 +129,9 @@ namespace WinFormsApp1
                                             sourceMAC.ToString(),
                                             destinationMAC.ToString()
                                         });
-                                        listViewPackets.Items.Add(item);
-                                        listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+                                            listViewPackets.Items.Add(item);
+                                            listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
+                                        }
                                     }
                                 }
                             }
@@ -304,7 +308,7 @@ namespace WinFormsApp1
                         {
 
                         }
-                        
+
                     }
                     else
                     {
@@ -535,52 +539,502 @@ namespace WinFormsApp1
             }
             listViewPackets.EnsureVisible(listViewPackets.Items.Count - 1);
         }
-
-        private void btnSearch_Click(object sender, EventArgs e)
+        private bool Filter(Packet packet)
         {
-            string searchText = textBoxSearch.Text.ToLower();
-            string searchCriteria = comboBoxSearch.SelectedItem.ToString();
-
-            var searchResults = packetList.Where(packet =>
+            if (filter == 6) return true;
+            try
             {
-                if (packet is EthernetPacket ethernetPacket)
+                int i = 1;
+                if(fil == "") return true;
+                string[] search = fil.Split("=");
+                for (int j = 0; j < search.Length; j++)
                 {
-                    if (ethernetPacket.PayloadPacket is IPPacket ipPacket)
+                    search[j] = search[j].Trim();
+                }
+                if (filter == 0)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
                     {
-                        if (ipPacket.PayloadPacket is TcpPacket tcpPacket)
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
                         {
-                            switch (searchCriteria)
+                            if (iPPacket.SourceAddress.ToString() == search[1] || iPPacket.DestinationAddress.ToString() == search[1])
                             {
-                                case "Source IP":
-                                    return ipPacket.SourceAddress.ToString().ToLower().Contains(searchText);
-                                case "Destination IP":
-                                    return ipPacket.DestinationAddress.ToString().ToLower().Contains(searchText);
-                                case "Source Port":
-                                    return tcpPacket.SourcePort.ToString().ToLower().Contains(searchText);
-                                case "Destination Port":
-                                    return tcpPacket.DestinationPort.ToString().ToLower().Contains(searchText);
-                            }
-                        }
-                        else if (ipPacket.PayloadPacket is UdpPacket udpPacket)
-                        {
-                            switch (searchCriteria)
-                            {
-                                case "Source IP":
-                                    return ipPacket.SourceAddress.ToString().ToLower().Contains(searchText);
-                                case "Destination IP":
-                                    return ipPacket.DestinationAddress.ToString().ToLower().Contains(searchText);
-                                case "Source Port":
-                                    return udpPacket.SourcePort.ToString().ToLower().Contains(searchText);
-                                case "Destination Port":
-                                    return udpPacket.DestinationPort.ToString().ToLower().Contains(searchText);
+                                return true;
                             }
                         }
                     }
                 }
-                return false;
-            }).ToList();
+                else if (filter == 1)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                        {
+                            if (iPPacket.SourceAddress.ToString() == search[1])
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (filter == 2)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                        {
+                            if (iPPacket.DestinationAddress.ToString() == search[1])
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else if (filter == 3)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                        {
+                            if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                            {
+                                if (tcpPacket.SourcePort.ToString() == search[1] || tcpPacket.DestinationPort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                            else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                            {
+                                if (udpPacket.SourcePort.ToString() == search[1] || udpPacket.DestinationPort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (filter == 4)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                        {
+                            if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                            {
+                                if (tcpPacket.SourcePort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                            else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                            {
+                                if (udpPacket.SourcePort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (filter == 5)
+                {
+                    if (packet is EthernetPacket ethernetPacket)
+                    {
+                        if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                        {
+                            if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                            {
+                                if (tcpPacket.DestinationPort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                            else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                            {
+                                if (udpPacket.DestinationPort.ToString() == search[1])
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Filter");
+            }
+            return false;
+        }
+        private void txtFilter_KeyEnterPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar != (char)Keys.Enter) return;
+            //opt = filter type
+            //opt == 0 : ip address
+            //opt == 1 : ip src 
+            //opt == 2 : ip des
+            //opt == 3 : ip port
+            //opt == 4 : ip port source
+            //opt == 5 : ip port destination
+            //opt == 6 : show all
+            int opt = -1;
+            int state = 0;
+            fil = txtFilter.Text;
+            if (fil.StartsWith("ip addr"))
+            {
+                opt = 0;
+                filter = 0;
+            }
+            if (fil.StartsWith("ip src"))
+            {
+                opt = 1;
+                filter = 1;
+            }
+            if (fil.StartsWith("ip des"))
+            {
+                opt = 2;
+                filter = 2;
+            }
+            if (fil.StartsWith("ip port"))
+            {
+                opt = 3;
+                filter = 3;
+            }
+            if (fil.StartsWith("ip psrc"))
+            {
+                opt = 4;
+                filter = 4;
+            }
+            if (fil.StartsWith("ip pdes"))
+            {
+                opt = 5;
+                filter = 5;
+            }
+            if (fil == "")
+            {
+                opt = 6;
+                filter = 6;
+            }
+            if (opt < 0) return;
 
-            DisplaySearchResults(searchResults);
+            string[] search = fil.Split("=");
+            for (int j = 0; j < search.Length; j++)
+            {
+                search[j] = search[j].Trim();
+            }
+
+            listViewPackets.Items.Clear();
+            int i = 1;
+
+            try
+            {
+                if (isCapturing)
+                {
+                    /*buttonStopCapture.PerformClick();*/
+                    state = 1;
+                }
+                if (opt == 6)
+                {
+                    foreach (Packet packet in packetList)
+                    {
+                        if (packet is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                {
+                                    var item = new ListViewItem(new[]
+                                                {
+                                            i.ToString(),
+                                            iPPacket.SourceAddress.ToString(),
+                                            iPPacket.DestinationAddress.ToString(),
+                                            tcpPacket.SourcePort.ToString(),
+                                            tcpPacket.DestinationPort.ToString(),
+                                            ethernetPacket.SourceHardwareAddress.ToString(),
+                                            ethernetPacket.DestinationHardwareAddress.ToString()
+                                        });
+                                    listViewPackets.Items.Add(item);
+                                }
+                                else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                {
+                                    var item = new ListViewItem(new[]
+                                                {
+                                            i.ToString(),
+                                            iPPacket.SourceAddress.ToString(),
+                                            iPPacket.DestinationAddress.ToString(),
+                                            udpPacket.SourcePort.ToString(),
+                                            udpPacket.DestinationPort.ToString(),
+                                            ethernetPacket.SourceHardwareAddress.ToString(),
+                                            ethernetPacket.DestinationHardwareAddress.ToString()
+                                        });
+                                    listViewPackets.Items.Add(item);
+                                }
+                            }
+                        }
+                        i++;
+                    }
+                    return;
+                }
+                foreach (Packet pkt in packetList)
+                {
+                    if (opt == 0)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.SourceAddress.ToString() == search[1] || iPPacket.DestinationAddress.ToString() == search[1])
+                                {
+                                    if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                    else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (opt == 1)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.SourceAddress.ToString() == search[1])
+                                {
+                                    if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                    else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (opt == 2)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.DestinationAddress.ToString() == search[1])
+                                {
+                                    if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                    else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (opt == 3)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                {
+                                    if (tcpPacket.SourcePort.ToString() == search[1] || tcpPacket.DestinationPort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                                else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                {
+                                    if (udpPacket.SourcePort.ToString() == search[1] || udpPacket.DestinationPort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (opt == 4)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                {
+                                    if (tcpPacket.SourcePort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                                else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                {
+                                    if (udpPacket.SourcePort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (opt == 5)
+                    {
+                        if (pkt is EthernetPacket ethernetPacket)
+                        {
+                            if (ethernetPacket.PayloadPacket is IPPacket iPPacket)
+                            {
+                                if (iPPacket.PayloadPacket is TcpPacket tcpPacket)
+                                {
+                                    if (tcpPacket.DestinationPort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                tcpPacket.SourcePort.ToString(),
+                                                tcpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                                else if (iPPacket.PayloadPacket is UdpPacket udpPacket)
+                                {
+                                    if (udpPacket.DestinationPort.ToString() == search[1])
+                                    {
+                                        var item = new ListViewItem(new[]
+                                                    {
+                                                i.ToString(),
+                                                iPPacket.SourceAddress.ToString(),
+                                                iPPacket.DestinationAddress.ToString(),
+                                                udpPacket.SourcePort.ToString(),
+                                                udpPacket.DestinationPort.ToString(),
+                                                ethernetPacket.SourceHardwareAddress.ToString(),
+                                                ethernetPacket.DestinationHardwareAddress.ToString()
+                                            });
+                                        listViewPackets.Items.Add(item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    i++;
+                }
+                /*if (state == 1) buttonStartCapture.PerformClick();*/
+            }
+            catch (Exception ex)
+            {
+                /*MessageBox.Show(ex.Message +"\n" + ex.TargetSite, "txtfilter");*/
+                return;
+            }
         }
     }
 }

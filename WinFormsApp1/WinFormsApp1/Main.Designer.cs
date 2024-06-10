@@ -43,12 +43,10 @@
             btnLoad = new Button();
             btnSave = new Button();
             panel1 = new Panel();
-            btnSearch = new Button();
-            comboBoxSearch = new ComboBox();
-            textBoxSearch = new TextBox();
             label4 = new Label();
             btnDelete = new Button();
             btnExport = new Button();
+            txtFilter = new TextBox();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -285,9 +283,7 @@
             // 
             panel1.Anchor = AnchorStyles.Top;
             panel1.BackColor = SystemColors.GradientInactiveCaption;
-            panel1.Controls.Add(btnSearch);
-            panel1.Controls.Add(comboBoxSearch);
-            panel1.Controls.Add(textBoxSearch);
+            panel1.Controls.Add(txtFilter);
             panel1.Controls.Add(label4);
             panel1.Controls.Add(btnDelete);
             panel1.Controls.Add(btnExport);
@@ -315,34 +311,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1567, 246);
             panel1.TabIndex = 19;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = SystemColors.ButtonHighlight;
-            btnSearch.Location = new Point(1304, 196);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(260, 42);
-            btnSearch.TabIndex = 26;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
-            btnSearch.Click += btnSearch_Click;
-            // 
-            // comboBoxSearch
-            // 
-            comboBoxSearch.FormattingEnabled = true;
-            comboBoxSearch.Items.AddRange(new object[] { "Source IP", "Destination IP", "Source Port", "Destination Port" });
-            comboBoxSearch.Location = new Point(800, 151);
-            comboBoxSearch.Name = "comboBoxSearch";
-            comboBoxSearch.Size = new Size(232, 36);
-            comboBoxSearch.TabIndex = 25;
-            // 
-            // textBoxSearch
-            // 
-            textBoxSearch.BackColor = SystemColors.Menu;
-            textBoxSearch.Location = new Point(1038, 151);
-            textBoxSearch.Name = "textBoxSearch";
-            textBoxSearch.Size = new Size(526, 34);
-            textBoxSearch.TabIndex = 24;
             // 
             // label4
             // 
@@ -374,6 +342,14 @@
             btnExport.Text = "Export";
             btnExport.UseVisualStyleBackColor = false;
             btnExport.Click += btnExport_Click;
+            // 
+            // txtFilter
+            // 
+            txtFilter.Location = new Point(784, 151);
+            txtFilter.Name = "txtFilter";
+            txtFilter.Size = new Size(780, 34);
+            txtFilter.TabIndex = 24;
+            txtFilter.KeyPress += txtFilter_KeyEnterPress;
             // 
             // Main
             // 
@@ -420,9 +396,7 @@
         private Panel panel1;
         private Button btnDelete;
         private Button btnExport;
-        private TextBox textBoxSearch;
         private Label label4;
-        private ComboBox comboBoxSearch;
-        private Button btnSearch;
+        private TextBox txtFilter;
     }
 }
