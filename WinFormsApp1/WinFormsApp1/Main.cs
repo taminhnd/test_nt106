@@ -378,5 +378,7 @@ namespace WinFormsApp1
                 DisplayPacketDetails(selectedPacket);
             }
         }
+
+        
     }
 }
